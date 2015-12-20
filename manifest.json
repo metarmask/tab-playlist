@@ -19,6 +19,10 @@
 		"default_icon": "images/pageAction/disabled.png",
 		"default_title": "Click to enable\nWhen a the video finishes with this enabled the next tab will be selected if it's a YouTube one."
 	},
+	"options_ui": {
+		"page": "options.html",
+		"chrome_style": true
+	},
 	"web_accessible_resources": [
 		"injection-script.js"
 	]

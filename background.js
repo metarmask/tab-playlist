@@ -72,7 +72,11 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 							return;
 						}
 						startPlaying(tabs[0].id);
-						chrome.tabs.remove(sender.tab.id);
+						chrome.storage.sync.get({"option-closeTab":true},function(items){
+							if(items["option-closeTab"] === true) {
+								chrome.tabs.remove(sender.tab.id);
+							}
+						});
 					}
 				});
 			}
