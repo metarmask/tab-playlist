@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<svg width="19.54" height="16" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" stroke="null" style="vector-effect: non-scaling-stroke;">
+ <g stroke="null">
+  <title stroke="null">Layer 1</title>
+  <g stroke="null" id="svg_5"/>
+  <g stroke="null" id="svg_9"/>
+  <g stroke="null" id="svg_12">
+   <rect stroke="null" id="svg_7" height="13.014346" width="16.24685" y="1.591772" x="1.708103" stroke-linecap="null" stroke-linejoin="null" stroke-dasharray="null" stroke-width="null" fill="#ffffff"/>
+   <path stroke="null" fill="#ff0000" id="svg_2" d="m17.747459,0l-15.972713,0c-0.97611,0 -1.774746,0.798636 -1.774746,1.774746l0,12.423222c0,0.97611 0.798636,1.774746 1.774746,1.774746l15.972713,0c0.97611,0 1.774746,-0.798636 1.774746,-1.774746l0,-12.423222c0,-0.97611 -0.798636,-1.774746 -1.774746,-1.774746zm0,14.197968l-15.972713,0l0,-12.423222l8.87373,0l0,3.549492l7.098984,0l0,8.87373z"/>
+   <path stroke="null" fill="#4285f4" id="svg_10" d="m7.021333,4.830132l0,7.670776l6.027039,-3.835388l-6.027039,-3.835388z"/>
+  </g>
+ </g>
+ <defs style="vector-effect: non-scaling-stroke;" stroke="null">
+  <pattern style="vector-effect: non-scaling-stroke;" stroke="null" height="100" width="100" y="0" x="0" patternUnits="userSpaceOnUse" id="gridpattern">
+   <image style="vector-effect: non-scaling-stroke;" stroke="null" height="100" width="100" y="0" x="0"/>
+  </pattern>
+ </defs>
+</svg>

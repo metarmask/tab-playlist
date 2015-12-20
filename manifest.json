@@ -5,6 +5,9 @@
 	"version": "0.1",
 	"description": "Let's you make a playlist by simply lining up tabs",
 	"author": "/u/metarmask",
+	"icons": {
+		"128":"images/extension/icon-128.png"
+	},
 	"background": {
 		"scripts": ["background.js"],
 		"persistent": false
