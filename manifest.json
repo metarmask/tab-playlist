@@ -1,0 +1,23 @@
+{
+	"manifest_version": 2,
+	"name": "Tab Playlist for YouTube™",
+	"short_name": "Tab Playlist",
+	"version": "0.1",
+	"description": "Let's you make a playlist by simply lining up tabs",
+	"author": "/u/metarmask",
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"permissions": [
+		"tabs",
+		"declarativeContent",
+		"https://www.youtube.com/"
+	],
+	"page_action": {
+		"default_icon": "pageActionIcon.png",
+		"default_title": "Start playing through tabs"
+	},
+	"web_accessible_resources": [
+		"injection-script.js"
+	]
+}
