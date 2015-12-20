@@ -16,7 +16,7 @@ chrome.runtime.onInstalled.addListener(function() {
 
 function startPlaying(tabID) {
 	console.log("Playing in tab with ID " + tabID);
-	chrome.pageAction.setIcon({tabId:tabID,path:"pageActionIconEnabled.png"});
+	chrome.pageAction.setIcon({tabId:tabID,path:"images/pageAction/enabled.png"});
 	chrome.tabs.update(tabID,{active:true});
 	chrome.tabs.executeScript(tabID,{file:"content-script.js"});
 }

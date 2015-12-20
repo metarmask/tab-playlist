@@ -14,7 +14,7 @@
 		"https://www.youtube.com/"
 	],
 	"page_action": {
-		"default_icon": "pageActionIcon.png",
+		"default_icon": "images/pageAction/disabled.png",
 		"default_title": "Start playing through tabs"
 	},
 	"web_accessible_resources": [
