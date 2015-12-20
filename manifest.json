@@ -6,7 +6,8 @@
 	"description": "Let's you make a playlist by simply lining up tabs",
 	"author": "/u/metarmask",
 	"background": {
-		"scripts": ["background.js"]
+		"scripts": ["background.js"],
+		"persistent": false
 	},
 	"permissions": [
 		"tabs",
