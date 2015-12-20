@@ -17,7 +17,7 @@
 	],
 	"page_action": {
 		"default_icon": "images/pageAction/disabled.png",
-		"default_title": "Start playing through tabs"
+		"default_title": "Click to enable\nWhen a the video finishes with this enabled the next tab will be selected if it's a YouTube one."
 	},
 	"web_accessible_resources": [
 		"injection-script.js"

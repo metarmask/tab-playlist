@@ -24,7 +24,7 @@ chrome.runtime.onStartup.addListener(function() {
 function startPlaying(tabID) {
 	console.log("Playing in tab with ID " + tabID);
 	chrome.pageAction.setIcon({tabId:tabID,path:"images/pageAction/enabled.png"});
-	chrome.pageAction.setTitle({tabId:tabID,title:"When this video finishes the tab to the right will be opened"});
+	chrome.pageAction.setTitle({tabId:tabID,title:"Click to disable\nWhen this video finishes the tab to the right will be opened"});
 	chrome.tabs.update(tabID,{active:true});
 	chrome.tabs.executeScript(tabID,{file:"content-script.js"});
 	chrome.storage.local.get("playingTabs",function(items){
