@@ -1,4 +1,4 @@
-var alreadyExistingTag = document.querySelector("script[async][src='chrome-extension://afcmfnlbcoginnfdkokfgpcmooekakhf/content-script-js-accesser.js']");
+var alreadyExistingTag = document.querySelector("script[async][src='" + chrome.runtime.getURL("content-script-js-accesser.js") + "']");
 if(!alreadyExistingTag) {
 	var scriptTag = document.createElement("script");
 	scriptTag.src = chrome.runtime.getURL("content-script-js-accesser.js");
