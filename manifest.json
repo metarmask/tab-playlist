@@ -27,6 +27,6 @@
 		"chrome_style": true
 	},
 	"web_accessible_resources": [
-		"injection-script.js"
+		"content-script-js-accesser.js"
 	]
 }
