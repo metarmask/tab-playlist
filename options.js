@@ -10,13 +10,7 @@ for(var i = 0;i < checkboxes.length;i++) {
 	checkboxes[i].addEventListener("click",function(){
 		var obj = {};
 		obj[this.id] = this.checked;
-		console.log("Setting " + this.id + " to " + this.checked);
 		chrome.storage.sync.set(obj,function(){
-			if(chrome.runtime.lastError) {
-				console.log("Error setting option: ",chrome.runtime.lastError);
-			}else{
-				console.log("Option set successfully");
-			}
 		});
 	});
 	options[checkboxes[i].id] = checkboxes[i].checked;
