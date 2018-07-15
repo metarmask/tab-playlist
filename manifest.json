@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "Tab Playlist for YouTube™",
 	"short_name": "Tab Playlist",
-	"version": "0.2",
+	"version": "0.3",
 	"description": "Lets you make a playlist by simply lining up tabs",
 	"author": "/u/metarmask",
 	"icons": {
