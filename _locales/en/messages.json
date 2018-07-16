@@ -1,0 +1,29 @@
+{
+	"extension_nameShort": {
+		"message": "Tab Playlist"
+	},
+	"extension_name": {
+		"message": "Tab Playlist for YouTube™"
+	},
+	"extension_description": {
+		"message": "Lets you make a playlist by simply lining up tabs"
+	},
+	"extension_description": {
+		"message": "Lets you make a playlist by simply lining up tabs"
+	},
+	"icon_isHidden": {
+		"message": "After loading a YouTube video, use this button to establish an interactive playlist"
+	},
+	"icon_enable": {
+		"message": "Establish neighbouring tabs as an interactive playlist"
+	},
+	"icon_disable": {
+		"message": "Dissolve this playlist"
+	},
+	"options_loading": {
+		"message": "Loading..."
+	},
+	"options_option_endRemoval": {
+		"message": "Remove tabs as they end"
+	}
+}

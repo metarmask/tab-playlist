@@ -1,32 +1,44 @@
 {
+	"applications": {
+		"gecko": {
+			"id": "tab-playlist@metarmask.com"
+		}
+	},
+	"default_locale": "en",
 	"manifest_version": 2,
-	"name": "Tab Playlist for YouTube™",
-	"short_name": "Tab Playlist",
+	"name": "__MSG_extension_name__",
+	"short_name": "__MSG_extension_nameShort__",
 	"version": "0.3",
-	"description": "Lets you make a playlist by simply lining up tabs",
+	"description": "__MSG_extension_description__",
 	"author": "/u/metarmask",
 	"icons": {
 		"128":"images/extension/icon-128.png"
 	},
 	"background": {
-		"scripts": ["background.js"],
+		"scripts": ["common.js", "background.js"],
 		"persistent": false
 	},
 	"permissions": [
-		"tabs",
 		"storage",
-		"declarativeContent",
-		"https://www.youtube.com/"
+		"https://www.youtube.com/*"
 	],
 	"page_action": {
-		"default_icon": "images/pageAction/disabled.png",
-		"default_title": "Click to enable\nWhen a the video finishes with this enabled the next tab will be selected if it's a YouTube one."
+		"default_icon": {
+			"16": "images/pageAction/enabled/16.png",
+			"19": "images/pageAction/enabled/19.png",
+			"24": "images/pageAction/enabled/24.png",
+			"32": "images/pageAction/enabled/32.png"
+		},
+		"default_title": "__MSG_extension_nameShort__\n__MSG_icon_isHidden__"
 	},
 	"options_ui": {
 		"page": "options.html",
 		"chrome_style": true
 	},
-	"web_accessible_resources": [
-		"content-script-js-accesser.js"
+	"content_scripts": [
+		{
+			"matches": ["https://www.youtube.com/*"],
+			"js": ["common.js", "content-script.js"]
+		}
 	]
 }
