@@ -33,7 +33,7 @@ function attach() {
 			}
 		}
 		Object.assign(state, changes);
-		console.log("content-script state changes", changes);
+		debugLog("content-script state changes", changes);
 		port.postMessage(changes);
 	};
 	const desireState = partialState => {

@@ -43,8 +43,10 @@ function getText(name, ...args) {
 	return message;
 }
 
-const debugEnabled = false;
-function debugLog(...args) {
-	if(!debugEnabled) return;
-	console.debug(...args);
+{
+	const debugEnabled = true;
+	function debugLog(...args) {
+		if(!debugEnabled) return;
+		console.debug(...args);
+	}
 }
