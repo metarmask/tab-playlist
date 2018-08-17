@@ -32,6 +32,15 @@ for(const scope of ["tab", "global"]) {
 })();
 
 
-browser.contextMenus.onClicked.addListener(({menuItemId: id, checked}) => {
-	console.log(id, checked);
+browser.contextMenus.onClicked.addListener(({menuItemId: id, checked}, rawTab) => {
+	const idPrefix = "options_option_";
+	debugLog(id, checked, rawTab);
+	if(!id.startsWith(idPrefix)) return;
+	const [scope, key] = id.substr(idPrefix.length).split("_");
+	debugLog(scope, key);
+	if(scope === "tab") {
+		const tab = tabs[rawTab.id];
+		if(!tab) throw new Error("Changed tab option in non-video tab");
+		tab[key] = checked;
+	}
 });
