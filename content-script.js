@@ -1,128 +1,222 @@
-var video;
-var eAutoplay;
+// When the extension updates the script can be injected multiple times.
+// This lexical scope takes care of that.
+{
 
-function cancelAutoplay() {
-	if(eAutoplay && eAutoplay.style.display !== "none") {
-		eAutoplay.querySelector(".ytp-upnext-cancel-button").click();
-		return;
+
+const tasks = new Set();
+class Task {
+	constructor() {
+		debugLog("Starting " + this.constructor.name);
+		tasks.add(this);
+	}
+	destructor() {
+		debugLog("Stopping " + this.constructor.name);
+		tasks.delete(this);
 	}
 }
 
-function attach() {
-	video = $("#movie_player video");
-	eAutoplay = $("#movie_player .ytp-upnext");
-	if(!video) return false;
-	const port = browser.runtime.connect();
-	if(port.error) throw port.error;
-	debugLog("content-script.js", "connected to port", port);
+class TaskFindVideo extends Task {
+	constructor() {
+		super();
+		this.interval = NaN;
+		this.observer = new MutationObserver(this.onMutations.bind(this));
+		const pageManager = $("#page-manager");
+		if(!pageManager) {
+			this.queryVideoNode();
+			throw new Error("No page manager found");
+		}
+		this.observer.observe(pageManager, {childList: true});
+		this.queryVideoNode();
+	}
 
-	const autoplayObserver = new MutationObserver(mutations => {
+	destructor() {
+		super.destructor();
+		clearInterval(this.interval);
+		this.observer.disconnect();
+	}
+
+	onMutations(mutations) {
+		outer:
 		for(const mutation of mutations) {
-			cancelAutoplay();
-			return;
+			for(const node of mutation.addedNodes) {
+				if(this.isWatchNode(node)) {
+					this.onWatchNode(node);
+					break outer;
+				}
+			}
 		}
-	});
+	}
 
-	const state = {};
-	const desiredState = {};
-	const setState = partialState => {
+	isWatchNode(node) {
+		return node.tagName.startsWith("YTD-WATCH");
+	}
+
+	onWatchNode(watchNode) {
+		this.interval = setInterval(
+			this.queryVideoNode.bind(this),
+			this.retryFreq,
+			watchNode
+		);
+	}
+
+	queryVideoNode(watchNode) {
+		const node = $("#movie_player video", watchNode);
+		if(node) {
+			new TaskProxyState(node);
+			this.destructor();
+		}
+	}
+}
+Object.defineProperty(TaskFindVideo, "retryFreq", {value: 500, enumerable: true});
+
+class TaskProxyState extends Task {
+	constructor(video) {
+		super();
+		this.e = {};
+		this.e.video = video;
+		this.e.autoplay = $("#movie_player .ytp-upnext");
+		this.e.$autoplayCancel = () => $(".ytp-upnext-cancel-button", this.e.autoplay);
+		this.autoplayObserver = new MutationObserver(this.onAutoplayMutation.bind(this));
+		this.listeners = [];
+		this.port = this.setupPort();
+		this.state = {
+			real: {},
+			desired: {}
+		}
+		this.setState({
+			ended: false,
+			playing: false,
+			autoplay: true,
+			fullscreen: false
+		});
+		this.desireState(this.state.real);
+	}
+
+	destructor() {
+		super.destructor();
+		if(!this.autoplayObserver) debugger;
+		this.autoplayObserver.disconnect();
+		for(const [e, args] of this.listeners) {
+			e.removeEventListener(...args);
+		}
+	}
+
+	setupPort() {
+		const port = browser.runtime.connect();
+		if(port.error) throw port.error;
+		port.onMessage.addListener(message => {
+			this.desireState(message);
+		});
+		port.onDisconnect.addListener(() => {
+			debugLog("port.onDisconnect");
+			this.destructor();
+		});
+		return port;
+	}
+
+	setState(partialState) {
+		const {state} = this;
+		let changed = false;
 		const changes = {};
 		for(const [key, value] of Object.entries(partialState)) {
-			if(state[key] !== value) {
+			if(state.real[key] !== value) {
+				changed = true;
 				changes[key] = value;
 			}
 		}
-		Object.assign(state, changes);
-		debugLog("content-script state changes", changes);
-		port.postMessage(changes);
-	};
-	const desireState = partialState => {
+		if(!changed) return;
+		Object.assign(state.real, changes);
+		this.port.postMessage(changes);
+	}
+
+	desireState(partialState) {
+		const {state, e} = this;
 		const changes = {};
 		for(const [key, value] of Object.entries(partialState)) {
-			if(desiredState[key] !== value) {
+			if(state.desired[key] !== value) {
 				changes[key] = value;
 			}
 		}
-		debugLog("Fulfilling desire", changes);
-		Object.assign(desiredState, changes);
+		Object.assign(state.desired, changes);
 		if("playing" in changes) {
 			if(changes.playing) {
-				video.play();
+				e.video.play();
 			} else {
-				video.pause();
-				video.autoplay = false;
+				e.video.pause();
+				e.video.autoplay = false;
 			}
 		}
 		if("autoplay" in changes) {
 			if(changes.autoplay) {
-				autoplayObserver.disconnect();
+				this.autoplayObserver.disconnect();
 			} else {
-				cancelAutoplay();
-				autoplayObserver.observe(eAutoplay, {
+				this.cancelAutoplay();
+				this.autoplayObserver.observe(e.autoplay, {
 					attributes: true
 				});
 			}
-			setState({autoplay: changes.autoplay});
+			this.setState({autoplay: changes.autoplay});
 		}
 		if("ended" in changes) {
 			if(changes.ended) {
-				video.currentTime = video.duration;
+				e.video.currentTime = e.video.duration;
 			} else {
-				if(state.ended) {
-					video.currentTime = 0;
-					video.play();
+				if(state.real.ended) {
+					e.video.currentTime = 0;
+					e.video.play();
 				}
 			}
 		}
-		Object.assign(desiredState, changes);
-	};
-	setState({
-		ended: false,
-		playing: false,
-		autoplay: true,
-		fullscreen: false
-	});
-	desireState(state);
-	port.onMessage.addListener(changes => {
-		debugLog("onMessage tab", changes);
-		if(changes[Symbol.iterator]) {
-			// Read
-		} else {
-			desireState(changes);
+		Object.assign(state.desired, changes);
+	}
+
+	on(e, ...args) {
+		e.addEventListener(...args);
+		this.listeners.push([e, args]);
+	}
+
+	onAutoplayMutation() {
+		this.cancelAutoplay();
+	}
+
+	addVideoListeners() {
+		this.on(this.e.video, "ended", () => {
+			this.setState({ended: true, playing: false});
+		});
+		this.on(this.e.video, "play", () => {
+			this.setState({ended: false, playing: true});
+		});
+		this.on(this.e.video, "pause", () => {
+			this.setState({ended: false, playing: true});
+		});
+	}
+
+	cancelAutoplay() {
+		const {e} = this;
+		if(e.autoplay && e.autoplay.style.display !== "none") {
+			e.$autoplayCancel().click()
 		}
-	});
-	port.onDisconnect.addListener(() => debugLog("background disconnected from tab"));
-	let everPlayed = false;
-	video.addEventListener("ended", () => {
-		setState({ended: true, playing: false});
-	});
-	video.addEventListener("play", () => {
-		setState({ended: false, playing: true});
-	});
-	video.addEventListener("pause", () => {
-		setState({ended: false, playing: true});
-	});
-	debugLog("Attached");
-	return true;
+	}
 }
 
-if(!attach()) {
-	debugLog("Could not attach to video element, observing page mutations");
-	const observer = new MutationObserver(mutations => {
-		outer:
-		for(const mutation of mutations) {
-			for(const node of mutation.addedNodes) {
-				if(node.tagName === "YTD-WATCH") {
-					debugLog("Watch view was added, trying again");
-					if(attach()) {
-						observer.disconnect();
-						break outer;
-					}
-				}
-			}
+if(window.killPastSelf) {
+	window.killPastSelf();
+}
+window.killPastSelf = () => {
+	for(const task of tasks) {
+		try {
+			task.destructor();
+		} catch(error) {
+			console.warn("Error while killing past self", error);
 		}
-	});
-	observer.observe($("#page-manager"), {
-		childList: true
-	});
+	}
+	debugLog("Killed past self");
+};
+
+new TaskFindVideo();
+
+// Prevents tabs.executeScript error
+0;
+
+
 }
