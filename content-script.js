@@ -23,7 +23,7 @@ class TaskFindVideo extends Task {
 		const pageManager = $("#page-manager");
 		if(!pageManager) {
 			this.queryVideoNode();
-			throw new Error("No page manager found");
+			throw new Error("No page manager element found");
 		}
 		this.observer.observe(pageManager, {childList: true});
 		this.queryVideoNode();
@@ -77,8 +77,9 @@ class TaskProxyState extends Task {
 		this.e.autoplay = $("#movie_player .ytp-upnext");
 		this.e.$autoplayCancel = () => $(".ytp-upnext-cancel-button", this.e.autoplay);
 		this.autoplayObserver = new MutationObserver(this.onAutoplayMutation.bind(this));
-		this.listeners = [];
 		this.port = this.setupPort();
+		this.listeners = [];
+		this.addVideoListeners();
 		this.state = {
 			real: {},
 			desired: {}
