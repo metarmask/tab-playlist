@@ -15,11 +15,12 @@
 		"128":"images/extension/icon-128.png"
 	},
 	"background": {
-		"scripts": ["common.js", "background.js"],
+		"scripts": ["common.js", "background.js", "options.js"],
 		"persistent": false
 	},
 	"permissions": [
 		"storage",
+		"contextMenus",
 		"https://www.youtube.com/*"
 	],
 	"page_action": {
@@ -30,10 +31,6 @@
 			"32": "images/pageAction/enabled/32.png"
 		},
 		"default_title": "__MSG_extension_nameShort__\n__MSG_icon_isHidden__"
-	},
-	"options_ui": {
-		"page": "options.html",
-		"chrome_style": true
 	},
 	"content_scripts": [
 		{

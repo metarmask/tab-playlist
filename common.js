@@ -45,8 +45,11 @@ function getText(name, ...args) {
 
 {
 	const debugEnabled = true;
-	function debugLog(...args) {
-		if(!debugEnabled) return;
-		console.debug(...args);
+	if(debugEnabled) {
+		debugLog = console.debug.bind(console);
+	} else {
+		debugLog = () => {};
 	}
 }
+
+0;

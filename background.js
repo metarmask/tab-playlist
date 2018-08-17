@@ -224,19 +224,33 @@ class Tab {
 }
 {
 	Object.defineProperty(Tab, "options", {value: {
-		enabled: false,
-		loop: false,
-		shuffle: false,
-		shufflePlayed: new Set(),
-		endRemoval: false
+		enabled: {
+			default: false,
+			hidden: "tab"
+		},
+		loop: {
+			default: false,
+			hidden: "upcoming"
+		},
+		shuffle: {
+			default: false,
+			hidden: "upcoming"
+		},
+		shufflePlayed: {
+			default: new Set(),
+			hidden: "always"
+		},
+		endRemoval: {
+			default: false
+		}
 	}});
-	for(const [option, value] of Object.entries(Tab.options)) {
+	for(const [option, {"default": value}] of Object.entries(Tab.options)) {
 		const kReal = "_" + option;
 		const kObserver = "_" + option + "Set";
 		Object.defineProperty(Tab.prototype, option, {
 			get() {
 				if(typeof this[kReal] === "undefined") {
-					return Tab.options[option];
+					return Tab.options[option].default;
 				} else {
 					return this[kReal];
 				}

@@ -20,7 +20,22 @@
 	"options_loading": {
 		"message": "Loading..."
 	},
+	"options_option_enabled": {
+		"message": "Enable"
+	},
+	"options_option_loop": {
+		"message": "Loop"
+	},
+	"options_option_shuffle": {
+		"message": "Shuffle"
+	},
 	"options_option_endRemoval": {
-		"message": "Remove tabs as they end"
+		"message": "Autoremove"
+	},
+	"options_upcoming": {
+		"message": "(upcoming)"
+	},
+	"options_global": {
+		"message": "Global options…"
 	}
 }
