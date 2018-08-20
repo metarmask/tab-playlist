@@ -289,7 +289,7 @@ class Tab {
 		});
 	}
 
-	// Keeps the background/event page alive
+	// Connections keep the background/event page alive
 	browser.runtime.onConnect.addListener(Tab._onConnect.bind(Tab));
 }
 browser.pageAction.onClicked.addListener(rawTab => {
