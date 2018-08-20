@@ -38,6 +38,16 @@ class Tab {
 		this.showIcon();
 		this._listenForEvents();
 		this.merge();
+		this.triggerOptionsSet();
+	}
+
+	// Fixes wrong icon after extension update
+	triggerOptionsSet() {
+		for(const option of Object.keys(Tab.options)) {
+			const key = "_" + option + "Set";
+			const func = this[key];
+			if(func) this[key](this[option]);
+		}
 	}
 
 	_listenForEvents() {
