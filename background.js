@@ -1,5 +1,6 @@
 browser.runtime.onInstalled.addListener(async () => {
 	debugLog("runtime.onInstalled");
+	optionsUI.init();
 	const tabs = await browser.tabs.query({});
 	for(const tab of tabs) {
 		try {
@@ -208,19 +209,26 @@ class Tab {
 		const [{id: activeID}] = await browser.tabs.query({windowId, active: true});
 		const [rawNext] = await browser.tabs.query({windowId, index: fromIndex + 1});
 		if(rawNext && tabs[rawNext.id]) {
-			this.autoplay(false);
-			const next = tabs[rawNext.id];
-			next.playing(true);
-			if(fromActive) {
-				await next.update({active: true});
-			} else {
-				await next.premierForegroundForInstant(next);
-			}
-			if(this.endRemoval) {
-				await this.remove();
-			}
+			await this.next(tabs[rawNext.id], fromActive);
 		} else {
-			this.autoplay(true);
+			if(this.loop) {
+				await this.next((await this.gatherPlaylist())[0], fromActive);
+			} else {
+				this.autoplay(true);
+			}
+		}
+	}
+
+	async next(tab, fromActive) {
+		this.autoplay(false);
+		tab.playing(true);
+		if(fromActive) {
+			await tab.update({active: true});
+		} else {
+			await tab.premierForegroundForInstant();
+		}
+		if(this.endRemoval) {
+			await this.remove();
 		}
 	}
 
@@ -239,8 +247,7 @@ class Tab {
 			hidden: "tab"
 		},
 		loop: {
-			default: false,
-			hidden: "upcoming"
+			default: false
 		},
 		shuffle: {
 			default: false,

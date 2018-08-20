@@ -1,36 +1,75 @@
-(async () => {
+class OptionsUI {
+	constructor() {
 
-for(const scope of ["tab", "global"]) {
-	let parentId;
-	if(scope === "global") {
-		parentId = `options_scope_${scope}`;
-		await browser.contextMenus.create({
-			title: getText("options_global"),
-			contexts: ["page_action"],
-			id: parentId
-		});
 	}
-	for(const [key, {"default": aDefault, hidden}] of Object.entries(Tab.options)) {
-		if(hidden === "always" || hidden === scope) continue;
-		if(typeof aDefault !== "boolean") throw new Error("Cannot handle non-boolean" + aDefault);
-		let title = getText("options_option_" + key);
-		if(hidden === "upcoming") {
-			title += " " + getText("options_upcoming");
+
+	scopes() {
+		return ["tab", "global"];
+	}
+
+	contexts() {
+		return ["page_action"];
+	}
+
+	scopeID(scope) {
+		return `options_scope_${scope}`;
+	}
+
+	* eachOptionID(scope) {
+		for(const [key, props] of Object.entries(Tab.options)) {
+			if(props.hidden === "always" || props.hidden === scope) continue;
+			yield [[key, props], `options_option_${scope}_${key}`];
 		}
-		await browser.contextMenus.create({
-			title,
-			enabled: hidden !== "upcoming",
-			id: `options_option_${scope}_${key}`,
-			checked: aDefault,
-			contexts: ["page_action"],
-			type: "checkbox",
-			parentId
-		});
+	}
+
+	async init() {
+		await browser.contextMenus.removeAll();
+		for(const scope of this.scopes()) {
+			let parentId;
+			if(scope === "global") {
+				parentId = this.scopeID(scope);
+				await browser.contextMenus.create({
+					title: getText("options_global"),
+					contexts: this.contexts(),
+					id: parentId
+				});
+			}
+			for(const [[key, {"default": aDefault, hidden}], id] of this.eachOptionID(scope)) {
+				if(typeof aDefault !== "boolean") throw new Error("Cannot handle non-boolean" + aDefault);
+				let title = getText("options_option_" + key);
+				if(hidden === "upcoming") {
+					title += " " + getText("options_upcoming");
+				}
+				await browser.contextMenus.create({
+					title,
+					enabled: hidden !== "upcoming",
+					id,
+					checked: aDefault,
+					contexts: this.contexts(),
+					type: "checkbox",
+					parentId
+				});
+			}
+		}
+	}
+
+	async updateTab(tab) {
+		for(const [[key, {"default": aDefault}], id] of this.eachOptionID("tab")) {
+			if(typeof aDefault !== "boolean") throw new Error("Cannot handle non-boolean" + aDefault);
+			await browser.contextMenus.update(id, {
+				checked: tab[key],
+			});
+		}
 	}
 }
 
-})();
+const optionsUI = new OptionsUI();
 
+browser.tabs.onActivated.addListener(({tabId}) => {
+	const tab = tabs[tabId];
+	if(!tab) return;
+	optionsUI.updateTab(tab);
+});
 
 browser.contextMenus.onClicked.addListener(({menuItemId: id, checked}, rawTab) => {
 	const idPrefix = "options_option_";
