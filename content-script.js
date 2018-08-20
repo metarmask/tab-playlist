@@ -134,10 +134,11 @@ class TaskProxyState extends Task {
 		const {state, e} = this;
 		const changes = {};
 		for(const [key, value] of Object.entries(partialState)) {
-			if(state.desired[key] !== value) {
+			if(state.desired[key] !== value || state.real[key] !== value) {
 				changes[key] = value;
 			}
 		}
+		debugLog("desire change", changes);
 		Object.assign(state.desired, changes);
 		if("playing" in changes) {
 			if(changes.playing) {
