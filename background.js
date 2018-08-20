@@ -191,6 +191,7 @@ class Tab {
 			from = playlist.reverse().find(t => t !== this);
 		}
 		for(const option of Object.keys(Tab.options)) {
+			// own <=> explicitly set
 			const fromOwn = from["_" + option];
 			if(typeof fromOwn !== "undefined") {
 				this[option] = fromOwn;
