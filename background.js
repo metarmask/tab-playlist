@@ -36,7 +36,6 @@ class Tab {
 		this.id = port.sender.tab.id;
 		this._state = {};
 		this.showIcon();
-		this.enabled = false;
 		this._listenForEvents();
 		this.merge();
 	}
