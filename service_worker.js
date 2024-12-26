@@ -9,7 +9,7 @@ chrome.runtime.onInstalled.addListener(function() {
 					},
 				})
 			],
-			actions: [new chrome.declarativeContent.ShowPageAction()]
+			actions: [new chrome.declarativeContent.ShowAction()]
 		}]);
 	});
 	chrome.storage.local.set({ playingTabs: [] }); // Reloading the extension doesn't trigger onStartup
