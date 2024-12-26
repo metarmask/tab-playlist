@@ -81,5 +81,7 @@ browser.contextMenus.onClicked.addListener(({menuItemId: id, checked}, rawTab) =
 		const tab = tabs[rawTab.id];
 		if(!tab) throw new Error("Changed tab option in non-video tab");
 		tab[key] = checked;
+	} else if(scope === "global") {
+		Tab.options[key].default = checked;
 	}
 });

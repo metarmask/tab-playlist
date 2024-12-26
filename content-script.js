@@ -23,7 +23,8 @@ class TaskFindVideo extends Task {
 		const pageManager = $("#page-manager");
 		if(!pageManager) {
 			this.queryVideoNode();
-			throw new Error("No page manager element found");
+			console.warn("No page manager element found");
+			return;
 		}
 		this.observer.observe(pageManager, {childList: true});
 		this.queryVideoNode();
@@ -100,6 +101,7 @@ class TaskProxyState extends Task {
 		for(const [e, args] of this.listeners) {
 			e.removeEventListener(...args);
 		}
+		this.port.disconnect();
 	}
 
 	setupPort() {

@@ -21,7 +21,7 @@
 	"permissions": [
 		"storage",
 		"contextMenus",
-		"https://www.youtube.com/*"
+		"https://www.youtube.com/"
 	],
 	"page_action": {
 		"default_icon": {
@@ -36,6 +36,10 @@
 		{
 			"matches": ["https://www.youtube.com/*"],
 			"js": ["common.js", "content-script.js"]
+		},
+		{
+			"matches": ["https://www.youtube.com/watch*"],
+			"js": ["common.js", "watch.js"]
 		}
 	]
 }

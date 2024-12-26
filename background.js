@@ -69,7 +69,8 @@ class Tab {
 	}
 
 	_onDisconnect() {
-		console.log(this, "disconnected");
+		debugLog("background: tab disconnected", this);
+		delete tabs[this.id];
 	}
 
 	_onMessage(message) {
@@ -311,4 +312,28 @@ browser.tabs.onMoved.addListener((id, {windowId, toIndex: index}) => {
 	if(!tab) return;
 	tab._refreshRaw({windowId, index});
 	tab.merge();
+});
+
+async function getTabURL(rawTab) {
+	if(rawTab.url) {
+		return rawTab.url;
+	} else {
+		try {
+			const [result] = await browser.tabs.executeScript(
+				rawTab.id,
+				{
+					code: "window.location.href",
+					runAt: "document_start"
+				}
+			);
+			return result;
+		} catch(error) {}
+	}
+}
+
+browser.tabs.onUpdated.addListener(async (id, changed, rawTab) => {
+	debugLog(changed, await getTabURL(rawTab));
+	debugLog(...args);
+}, {
+	urls: ["https://www.youtube.com/watch*"]
 });

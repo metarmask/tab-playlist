@@ -1,5 +1,5 @@
 var $ = (selector, from = document) => {
-	return from.querySelector(selector);	
+	return from.querySelector(selector);
 };
 
 {
@@ -9,7 +9,7 @@ var $ = (selector, from = document) => {
 				const value = target[property];
 				if(value === chrome.runtime.connect) {
 					return value.bind(target);
-				} else if(typeof value === "function" && !value.prototype) {
+				} else if(typeof value === "function" && (!value.prototype || (target.constructor && target.constructor.name === "StorageArea"))) {
 					return (...args) => {
 						return new Promise((resolve, reject) => {
 							value.call(target, ...args, result => {
@@ -21,7 +21,7 @@ var $ = (selector, from = document) => {
 							});
 						});
 					};
-				} else if(typeof value === "object" && !(value instanceof chrome.Event)) {
+				} else if(typeof value === "object" && !("addListener" in value)) {
 					return createPromiseProxy(value);
 				} else {
 					return value;
