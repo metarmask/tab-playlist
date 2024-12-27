@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Tab Playlist for YouTube\u00e2\u201e\u00a2",
+  "name": "Tab Playlist for YouTube™",
   "short_name": "Tab Playlist",
   "version": "0.4",
   "description": "Lets you make a playlist by simply lining up tabs",
@@ -9,19 +9,16 @@
     "128": "images/extension/icon-128.png"
   },
   "background": {
-    "persistent": false,
     "service_worker": "service_worker.js"
   },
   "permissions": [
     "tabs",
     "storage",
     "declarativeContent",
-    "scripting",
-    "activeTab"
+    "scripting"
   ],
   "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
+    "page": "options.html"
   },
   "web_accessible_resources": [
     {

@@ -55,20 +55,22 @@ chrome.action.onClicked.addListener(function(tab) {
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	if(message == "ended" && sender.tab !== undefined) {
-		console.log("service_worker onMessage handler for ended message from player. Attempting to switch tabs...");
+		// Received video ended message from player. Attempting to switch tabs
 		chrome.storage.local.get("playingTabs", function(items) {
 			if(items.playingTabs.indexOf(sender.tab.id) != -1) {
+				// Find the next tab to the right (+1) in our original window
 				chrome.tabs.query({ windowId: sender.tab.windowId, index: sender.tab.index+1 }, function(tabs) {
-					console.log("service_worker onMessage handler tabs queried");
 					if(tabs[0] !== undefined) {
-						console.log("service_worker onMessage handler next tab found");
+						// Found a tab, make sure its Youtube before we switch to it
 						var url = new URL(tabs[0].url);
 						if(!(url.host == "www.youtube.com" && url.pathname == "/watch")) {
-							console.log("service_worker onMessage handler next tab not youtube");
 							return;
 						}
+
+						// Switch to the tab and start the video
 						startPlaying(tabs[0].id);
-						console.log("service_worker onMessage handler next tab activated and playing");
+
+						// Optionally close the tab that just finished playing
 						chrome.storage.sync.get({"option-closeTab":true}, function(items){
 							if(items["option-closeTab"] === true) {
 								chrome.tabs.remove(sender.tab.id);
