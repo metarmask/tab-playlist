@@ -4,7 +4,8 @@ if(!alreadyExistingTag) {
 	scriptTag.src = chrome.runtime.getURL("content-script-js-accesser.js");
 	scriptTag.async = true;
 	document.head.appendChild(scriptTag);
-	window.addEventListener("message",function(){
+	// Could this be simplified or is there a reason we're posting a message from the accesser and handling it here by sending another message to the service worker?
+	window.addEventListener("message", function(event) {
 		if(event.data == "tabplaylist: ended") {
 			chrome.runtime.sendMessage("ended");
 		}
