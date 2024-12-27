@@ -33,7 +33,9 @@
   ],
   "action": {
     "default_icon": "images/pageAction/disabled.png",
-    "default_title": "Click to enable\nWhen a the video finishes with this enabled the next tab will be selected if it's a YouTube one."
+    "default_title": "Click to enable\nWhen a the video finishes with this enabled the next tab will be selected if it's a YouTube one.",
+    "enabled_icon": "images/pageAction/enabled.png",
+    "enabled_title": "Click to disable\nWhen this video finishes the tab to the right will be opened"
   },
   "content_security_policy": {},
   "host_permissions": [

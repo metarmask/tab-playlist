@@ -20,8 +20,8 @@ chrome.runtime.onStartup.addListener(function() {
 });
 
 function startPlaying(tabID) {
-	chrome.action.setIcon({ tabId: tabID, path: "images/pageAction/enabled.png" });
-	chrome.action.setTitle({ tabId: tabID, title: "Click to disable\nWhen this video finishes the tab to the right will be opened" });
+	chrome.action.setIcon({ tabId: tabID, path: manifest.action.enabled_icon });
+	chrome.action.setTitle({ tabId: tabID, title: manifest.action.enabled_title });
 	chrome.tabs.update(tabID, { active: true });
 	chrome.scripting.executeScript({ target: { tabId: tabID }, files: ["content-script.js"] });
 	chrome.storage.local.get("playingTabs", function(items) {
