@@ -63,6 +63,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 				chrome.tabs.query({ windowId: sender.tab.windowId, index: sender.tab.index+1 }).then((tabs) => {
 					if(tabs[0] !== undefined) {
 						// Found a tab, make sure its Youtube before we switch to it
+						if(!tabs[0].url) {
+							return;
+						}
 						var url = new URL(tabs[0].url);
 						if(!(url.host == "www.youtube.com" && url.pathname == "/watch")) {
 							return;
