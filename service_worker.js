@@ -20,6 +20,7 @@ chrome.runtime.onStartup.addListener(function() {
 });
 
 function startPlaying(tabID) {
+	var manifest = chrome.runtime.getManifest();
 	chrome.action.setIcon({ tabId: tabID, path: manifest.action.enabled_icon });
 	chrome.action.setTitle({ tabId: tabID, title: manifest.action.enabled_title });
 	chrome.tabs.update(tabID, { active: true });
