@@ -27,7 +27,7 @@
         "content-script.js"
       ],
       "matches": [
-        "<all_urls>"
+        "https://www.youtube.com/*"
       ]
     }
   ],
