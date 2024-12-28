@@ -43,6 +43,24 @@ function stopPlaying(tabID) {
 	chrome.action.setTitle({ tabId: tabID, title: manifest.action.default_title });
 }
 
+// Determines if a given URL is a website with a video player to activate and play (Youtube right now)
+function validateTabUrl(url) {
+	if (!url) {
+		return false;
+	}
+
+	var urlObj = new URL(url);
+	if (!urlObj.host.includes("youtube.com")) {
+		return false;
+	}
+
+	if (urlObj.pathname != "/watch" && urlObj.pathname != "/") {
+		return false;
+	}
+
+	return true;
+}
+
 chrome.action.onClicked.addListener(function(tab) {
 	chrome.storage.local.get("playingTabs").then((items) => {
 		if(items.playingTabs.indexOf(tab.id) == -1) {
@@ -62,15 +80,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 				chrome.tabs.query({ windowId: sender.tab.windowId, index: sender.tab.index+1 }).then((tabs) => {
 					if(tabs[0] !== undefined) {
 						// Found a tab, make sure its Youtube before we switch to it
-						if(!tabs[0].url) {
-							return;
-						}
-						var url = new URL(tabs[0].url);
-						if (!url.host.includes("youtube.com")) {
-							return;
-						}
-
-						if (url.pathname != "/watch" && url.pathname != "/") {
+						if (!validateTabUrl(tabs[0].url)) {
 							return;
 						}
 
