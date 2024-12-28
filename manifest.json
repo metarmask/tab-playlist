@@ -27,7 +27,7 @@
         "content-script.js"
       ],
       "matches": [
-        "https://www.youtube.com/*"
+        "https://*youtube.com/*"
       ]
     }
   ],
@@ -39,6 +39,6 @@
   },
   "content_security_policy": {},
   "host_permissions": [
-    "https://www.youtube.com/"
+    "https://*youtube.com/"
   ]
 }

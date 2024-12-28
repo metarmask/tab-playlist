@@ -4,8 +4,7 @@ chrome.runtime.onInstalled.addListener(function() {
 			conditions: [
 				new chrome.declarativeContent.PageStateMatcher({
 					pageUrl: {
-						hostEquals: "www.youtube.com",
-						pathEquals: "/watch"
+						hostSuffix: ".youtube.com"
 					},
 				})
 			],
@@ -64,7 +63,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 					if(tabs[0] !== undefined) {
 						// Found a tab, make sure its Youtube before we switch to it
 						var url = new URL(tabs[0].url);
-						if(!(url.host == "www.youtube.com" && url.pathname == "/watch")) {
+						if (!url.host.includes("youtube.com")) {
+							return;
+						}
+
+						if (url.pathname != "/watch" && url.pathname != "/") {
 							return;
 						}
 
