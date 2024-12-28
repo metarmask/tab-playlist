@@ -4,7 +4,7 @@ chrome.runtime.onInstalled.addListener(function() {
 			conditions: [
 				new chrome.declarativeContent.PageStateMatcher({
 					pageUrl: {
-						hostSuffix: ".youtube.com"
+						hostSuffix: "youtube.com"
 					},
 				})
 			],
