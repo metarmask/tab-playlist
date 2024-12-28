@@ -12,33 +12,31 @@
     "service_worker": "service_worker.js"
   },
   "permissions": [
-    "tabs",
     "storage",
     "declarativeContent",
     "scripting"
   ],
-  "options_ui": {
-    "page": "options.html"
-  },
+  "host_permissions": [
+    "https://www.youtube.com/"
+  ],
   "web_accessible_resources": [
     {
       "resources": [
-        "content-script-js-accesser.js",
-        "content-script.js"
+        "content-script-js-accesser.js"
       ],
       "matches": [
         "https://*youtube.com/*"
       ]
     }
   ],
+  "options_ui": {
+    "page": "options.html"
+  },
   "action": {
     "default_icon": "images/pageAction/disabled.png",
     "default_title": "Click to enable\nWhen a the video finishes with this enabled the next tab will be selected if it's a YouTube one.",
     "enabled_icon": "images/pageAction/enabled.png",
     "enabled_title": "Click to disable\nWhen this video finishes the tab to the right will be opened"
   },
-  "content_security_policy": {},
-  "host_permissions": [
-    "https://*youtube.com/"
-  ]
+  "content_security_policy": {}
 }
