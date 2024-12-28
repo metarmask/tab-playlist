@@ -79,7 +79,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 				// Find the next tab to the right (+1) in our original window
 				chrome.tabs.query({ windowId: sender.tab.windowId, index: sender.tab.index+1 }).then((tabs) => {
 					if(tabs[0] !== undefined) {
-						// Found a tab, make sure its Youtube before we switch to it
+						// Found a tab, make sure its a valid target before we switch to it
 						if (!validateTabUrl(tabs[0].url)) {
 							return;
 						}
