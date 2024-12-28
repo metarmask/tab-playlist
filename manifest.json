@@ -17,7 +17,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://*youtube.com/"
+    "https://*.youtube.com/"
   ],
   "web_accessible_resources": [
     {
@@ -25,7 +25,7 @@
         "content-script-js-accesser.js"
       ],
       "matches": [
-        "https://*youtube.com/*"
+        "https://*.youtube.com/*"
       ]
     }
   ],
