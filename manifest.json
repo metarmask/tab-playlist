@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tab Playlist for YouTube™",
   "short_name": "Tab Playlist",
-  "version": "0.4",
+  "version": "0.5",
   "description": "Lets you make a playlist by simply lining up tabs",
   "author": "/u/metarmask",
   "icons": {
@@ -17,7 +17,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://www.youtube.com/"
+    "https://*.youtube.com/"
   ],
   "web_accessible_resources": [
     {
@@ -25,7 +25,7 @@
         "content-script-js-accesser.js"
       ],
       "matches": [
-        "https://www.youtube.com/*"
+        "https://*.youtube.com/*"
       ]
     }
   ],
